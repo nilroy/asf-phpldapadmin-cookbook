@@ -40,3 +40,21 @@ template "/etc/phpldapadmin/config.php" do
   mode 0640
   notifies :restart, 'service[httpd]'
 end
+
+#Delete templates
+directory "/usr/share/phpldapadmin/templates/creation" do
+  recursive true
+  action :delete
+end
+
+directory "/usr/share/phpldapadmin/templates/creation" do
+  action :create
+end
+
+#Add custom template
+template "/usr/share/phpldapadmin/templates/creation/asf-user.xml" do
+  source 'asf-user.xml.erb'
+  owner 'root'
+  group 'root'
+  mode 0644
+end
