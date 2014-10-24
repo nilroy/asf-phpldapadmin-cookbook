@@ -8,53 +8,48 @@
 # Licensed under the Apache License, Version 2.0.
 #
 
-# Add the EPEL repo
-yum_repository 'epel' do
-  description 'Extra Packages for Enterprise Linux'
-  mirrorlist 'http://mirrors.fedoraproject.org/mirrorlist?repo=epel-6&arch=$basearch'
-  gpgkey 'http://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-6'
-  action :create
-end
+include_recipe 'apache2::default'
+include_recipe 'apache2::mod_alias'
+include_recipe 'apache2::mod_php5'
+include_recipe 'yum-epel'
 
 # Install phpldapadmin package
 package "phpldapadmin"
 
-service 'httpd' do
-  action :nothing
-end
-
-
 # Configure phpldapadmin from templates
 
-template "/etc/httpd/conf.d/phpldapadmin.conf" do
-  source 'phpldapadmin.conf.erb'
-  owner 'root'
-  group 'root'
-  mode 0644
+web_app 'phpldapadmin' do
+  template 'phpldapadmin.conf.erb'
+  path "#{node['apache']['dir']}/sites-available/phpldapadmin.conf"
+  enable true
 end
 
-template "/etc/phpldapadmin/config.php" do
+apache_site 'phpldapadmin' do
+  enable true
+end
+
+template "#{node['phpldapadmin']['config_dir']}/config.php" do
   source 'config.php.erb'
-  owner 'root'
-  group 'apache'
+  owner node['apache']['user']
+  group node['apache']['group']
   mode 0640
-  notifies :restart, 'service[httpd]'
+  notifies :restart, 'service[apache2]'
 end
 
 #Delete templates
-directory "/usr/share/phpldapadmin/templates/creation" do
+directory "#{node['phpldapadmin']['install_dir']}/templates/creation" do
   recursive true
   action :delete
 end
 
-directory "/usr/share/phpldapadmin/templates/creation" do
+directory "#{node['phpldapadmin']['install_dir']}/templates/creation" do
   action :create
 end
 
 #Add custom template
-template "/usr/share/phpldapadmin/templates/creation/asf-user.xml" do
+template "#{node['phpldapadmin']['install_dir']}/templates/creation/asf-user.xml" do
   source 'asf-user.xml.erb'
-  owner 'root'
-  group 'root'
+  owner node['apache']['user']
+  group node['apache']['group']
   mode 0644
 end
