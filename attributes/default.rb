@@ -7,3 +7,8 @@
 # Classification level: Public
 # Licensed under the Apache License, Version 2.0.
 #
+
+node.default['apache']['default_site_enabled'] = false
+
+default['phpldapadmin']['config_dir'] = '/etc/phpldapadmin'
+default['phpldapadmin']['install_dir'] = '/usr/share/phpldapadmin'
