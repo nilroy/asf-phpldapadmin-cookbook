@@ -21,6 +21,7 @@ package "phpldapadmin"
 web_app 'phpldapadmin' do
   template 'phpldapadmin.conf.erb'
   path "#{node['apache']['dir']}/sites-available/phpldapadmin.conf"
+  site_alias = node['phpldapadmin']['alias']
   enable true
 end
 
