@@ -9,9 +9,9 @@ Depends from ['yum' cookbook](https://github.com/opscode-cookbooks/yum.git)
 
 Usage
 -----
-#### chef-zephyr::default
+#### phpldapadmin-cookbook::default
 
-Just include `chef-zephyr` in your node's `run_list`:
+Just include `phpldapadmin-cookbook` in your node's `run_list`:
 
 ```json
 {
