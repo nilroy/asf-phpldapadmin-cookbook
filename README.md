@@ -5,8 +5,7 @@ Cookbook for installation phpldapadmin with custom configuration for [ASF-Platfo
 
 Depends
 -------
-No dependencies
-
+Depends from ['yum' cookbook](https://github.com/opscode-cookbooks/yum.git)
 
 Usage
 -----
