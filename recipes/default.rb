@@ -11,7 +11,10 @@
 include_recipe 'apache2::default'
 include_recipe 'apache2::mod_alias'
 include_recipe 'apache2::mod_php5'
-include_recipe 'yum-epel'
+if node[:platform_family].include?("rhel")
+  include_recipe 'yum-epel'
+end
+
 
 # Install phpldapadmin package
 package "phpldapadmin"
