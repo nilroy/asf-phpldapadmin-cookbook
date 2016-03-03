@@ -11,6 +11,7 @@
 include_recipe 'apache2::default'
 include_recipe 'apache2::mod_alias'
 include_recipe 'apache2::mod_php5'
+
 if node[:platform_family].include?("rhel")
   include_recipe 'yum-epel'
 end
@@ -38,22 +39,4 @@ template "#{node['phpldapadmin']['config_dir']}/config.php" do
   group node['apache']['group']
   mode 0640
   notifies :restart, 'service[apache2]'
-end
-
-#Delete templates
-directory "#{node['phpldapadmin']['install_dir']}/templates/creation" do
-  recursive true
-  action :delete
-end
-
-directory "#{node['phpldapadmin']['install_dir']}/templates/creation" do
-  action :create
-end
-
-#Add custom template
-template "#{node['phpldapadmin']['install_dir']}/templates/creation/asf-user.xml" do
-  source 'asf-user.xml.erb'
-  owner node['apache']['user']
-  group node['apache']['group']
-  mode 0644
 end
